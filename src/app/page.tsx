@@ -1,9 +1,12 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useEffect } from "react";
+import Link from "next/link";
 import { useAccount, useConnect, useDisconnect, useGasPrice } from "wagmi";
 import { mainnet, sepolia } from "wagmi/chains";
+import {
+  DynamicContextProvider,
+  DynamicWidget,
+} from "@dynamic-labs/sdk-react-core";
 
 function App() {
   const account = useAccount();
@@ -13,7 +16,7 @@ function App() {
 
   return (
     <>
-      <ConnectButton />
+      <DynamicWidget variant="modal" />
       <div>{result.data ? `${result.data} Gwei` : "가스 가격 로딩 중..."}</div>
       <div>
         <h2>계정</h2>
@@ -46,8 +49,14 @@ function App() {
         <div>{status}</div>
         <div>{error?.message}</div>
       </div>
+
+      <Link href="/resister">
+        <button type="button">Resister 페이지로 이동</button>
+      </Link>
     </>
   );
 }
 
 export default App;
+
+// 0xda06760767b3a4794ce5cc7ccbb32819dcccb4d98359b42edde5b3fe6bb3a296

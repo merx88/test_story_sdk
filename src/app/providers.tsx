@@ -1,27 +1,61 @@
 "use client";
-
+import { http, createConfig, WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { type ReactNode, useState } from "react";
-import { type State, WagmiProvider } from "wagmi";
-import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { sepolia } from "wagmi/chains";
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
+import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
+import AppProvider from "@/lib/context/AppContext";
+import { PropsWithChildren } from "react";
 
-import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
+// setup wagmi
+const config = createConfig({
+  chains: [sepolia],
+  multiInjectedProviderDiscovery: false,
+  transports: {
+    [sepolia.id]: http(),
+  },
+}) as any;
 
-import { getConfig } from "@/wagmi";
+const queryClient = new QueryClient();
 
-export function Providers(props: {
-  children: ReactNode;
-  initialState?: State;
-}) {
-  const [config] = useState(() => getConfig());
-  const [queryClient] = useState(() => new QueryClient());
+// setup dynamic
+// add any extra networks here
+const evmNetworks = [
+  {
+    blockExplorerUrls: ["https://sepolia.etherscan.io"],
+    chainId: 11155111,
+    iconUrls: ["https://app.dynamic.xyz/assets/networks/sepolia.svg"],
+    name: "Sepolia",
+    nativeCurrency: {
+      decimals: 18,
+      name: "Sepolia Ether",
+      symbol: "ETH",
+    },
+    networkId: 11155111,
+    rpcUrls: [process.env.NEXT_PUBLIC_RPC_PROVIDER_URL as string],
+    vanityName: "Sepolia",
+  },
+];
 
+export default function Web3Providers({ children }: PropsWithChildren) {
   return (
-    <WagmiProvider config={config} initialState={props.initialState}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{props.children}</RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <DynamicContextProvider
+      settings={{
+        appName: "membership project",
+        environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID as string,
+        walletConnectors: [EthereumWalletConnectors],
+        overrides: { evmNetworks },
+        networkValidationMode: "always",
+      }}
+    >
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <DynamicWagmiConnector>
+            <AppProvider>{children}</AppProvider>
+          </DynamicWagmiConnector>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </DynamicContextProvider>
   );
 }
