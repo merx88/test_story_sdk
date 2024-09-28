@@ -69,7 +69,7 @@ export default async function uploadJSONToIPFS(formData: FormData) {
   console.log(upload_json_res);
   console.log("===========🥳 Finish pin ipfs===========");
   return {
-    ipfsUri: `ipfs://${upload_json_res.IpfsHash}`,
+    ipfsUri: `https://ipfs.io/ipfs/${upload_json_res.IpfsHash}`,
     ipfsJson: body,
   };
 }

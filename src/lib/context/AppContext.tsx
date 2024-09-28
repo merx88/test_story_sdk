@@ -1,18 +1,10 @@
 "use client";
-import { StoryClient, StoryConfig } from "@story-protocol/core-sdk";
+import { iliad } from "@/app/providers";
 import { PropsWithChildren, createContext } from "react";
 import { useContext, useState } from "react";
-import {
-  createPublicClient,
-  createWalletClient,
-  Address,
-  custom,
-  http,
-} from "viem";
-import { sepolia } from "viem/chains";
-import { defaultNftContractAbi } from "@/lib/defaultNftContractAbi";
+import { Address, createPublicClient, createWalletClient, custom } from "viem";
 import { useWalletClient } from "wagmi";
-import { StoryProvider } from "@story-protocol/react-sdk";
+import { defaultNftContractAbi } from "../defaultNftContractAbi";
 
 interface AppContextType {
   txLoading: boolean;
@@ -48,34 +40,26 @@ export default function AppProvider({ children }: PropsWithChildren) {
   const mintNFT = async (to: Address, uri: string) => {
     if (!window.ethereum) return "";
     console.log("Minting a new NFT...");
-
-    //create wallet client
     const walletClient = createWalletClient({
       account: wallet?.account.address as Address,
-      chain: sepolia,
+      chain: iliad,
       transport: custom(window.ethereum),
     });
-    console.log(`walletClient :${walletClient}`);
-    //create public client
     const publicClient = createPublicClient({
       transport: custom(window.ethereum),
-      chain: sepolia,
+      chain: iliad,
     });
-    console.log(`publicClient :${publicClient}`);
 
-    // const { request } = await publicClient.simulateContract({
-    //   address: "0xe8E8dd120b067ba86cf82B711cC4Ca9F22C89EDc" as Address,
-    //   functionName: "mint",
-    //   args: [to, uri],
-    //   abi: defaultNftContractAbi,
-    // });
-    const hash = await walletClient.writeContract({
-      address: "0xd516482bef63Ff19Ed40E4C6C2e626ccE04e19ED",
-      functionName: "mint",
+    console.log("client setting Done!");
+
+    const { request } = await publicClient.simulateContract({
+      address: "0xd2a4a4Cb40357773b658BECc66A6c165FD9Fc485",
+      functionName: "mintNFT",
       args: [to, uri],
       abi: defaultNftContractAbi,
     });
-
+    console.log("simulateContract Done!");
+    const hash = await walletClient.writeContract(request);
     console.log(`Minted NFT successful with hash: ${hash}`);
 
     const receipt = await publicClient.waitForTransactionReceipt({ hash });
@@ -89,49 +73,21 @@ export default function AppProvider({ children }: PropsWithChildren) {
     setTransactions((oldTxs) => [...oldTxs, { txHash, action, data }]);
   };
 
-  if (!wallet) {
-    return (
-      <AppContext.Provider
-        value={{
-          txLoading,
-          txHash,
-          txName,
-          transactions,
-          setTxLoading,
-          setTxName,
-          setTxHash,
-          mintNFT,
-          addTransaction,
-        }}
-      >
-        {children}
-      </AppContext.Provider>
-    );
-  }
-
   return (
-    <StoryProvider
-      config={{
-        chainId: "sepolia",
-        transport: http("https://ethereum-sepolia-rpc.publicnode.com"),
-        wallet: wallet,
+    <AppContext.Provider
+      value={{
+        txLoading,
+        txHash,
+        txName,
+        transactions,
+        setTxLoading,
+        setTxName,
+        setTxHash,
+        mintNFT,
+        addTransaction,
       }}
     >
-      <AppContext.Provider
-        value={{
-          txLoading,
-          txHash,
-          txName,
-          transactions,
-          setTxLoading,
-          setTxName,
-          setTxHash,
-          mintNFT,
-          addTransaction,
-        }}
-      >
-        {children}
-      </AppContext.Provider>
-    </StoryProvider>
+      {children}
+    </AppContext.Provider>
   );
 }

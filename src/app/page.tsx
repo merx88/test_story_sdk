@@ -7,6 +7,7 @@ import {
   DynamicContextProvider,
   DynamicWidget,
 } from "@dynamic-labs/sdk-react-core";
+import RegisterIPA from "@/components/ResisterIPA";
 
 function App() {
   const account = useAccount();
@@ -49,7 +50,9 @@ function App() {
         <div>{status}</div>
         <div>{error?.message}</div>
       </div>
-
+      <h2>🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧</h2>
+      <RegisterIPA />
+      <h2>🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧</h2>
       <Link href="/resister">
         <button type="button">Resister 페이지로 이동</button>
       </Link>
