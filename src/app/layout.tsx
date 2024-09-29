@@ -10,7 +10,6 @@ import Providers from "./Web3Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout(props: { children: ReactNode }) {
-  // const initialState = cookieToInitialState(getConfig());
   return (
     <html lang="en">
       <body className={inter.className}>

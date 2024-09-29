@@ -17,7 +17,7 @@ export default function RegisterIPA() {
   const [nftId, setNftId] = useState("");
   const [nftContractAddress, setNftContractAddress] = useState("");
   const { data: wallet } = useWalletClient();
-  const { register } = useIpAsset();
+  // const { register } = useIpAsset();
 
   const mintAndRegisterNFT = async () => {
     if (!wallet?.account.address) return;
@@ -29,12 +29,8 @@ export default function RegisterIPA() {
     //@ts-ignore
     formData.append("file", image);
     const { ipfsUri, ipfsJson } = await uploadJSONToIPFS(formData);
-    //nft 민팅
-    console.log("===========🎉 Start mint nft===========");
-
+    //nft mint
     const tokenId = await mintNFT(wallet?.account.address as Address, ipfsUri);
-
-    console.log("===========✅ Success mint nft===========");
 
     // registerExistingNFT(
     //   tokenId,

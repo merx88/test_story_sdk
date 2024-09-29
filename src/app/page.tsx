@@ -18,7 +18,7 @@ function App() {
   return (
     <>
       <DynamicWidget variant="modal" />
-      <div>{result.data ? `${result.data} Gwei` : "가스 가격 로딩 중..."}</div>
+      <div>{result.data ? `${result.data} Gwei` : "loading gas"}</div>
       <div>
         <h2>계정</h2>
 
@@ -54,12 +54,10 @@ function App() {
       <RegisterIPA />
       <h2>🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧</h2>
       <Link href="/resister">
-        <button type="button">Resister 페이지로 이동</button>
+        <button type="button">Move to Resister</button>
       </Link>
     </>
   );
 }
 
 export default App;
-
-// 0xda06760767b3a4794ce5cc7ccbb32819dcccb4d98359b42edde5b3fe6bb3a296
