@@ -6,7 +6,6 @@ import { Readable } from "stream";
 const PINATA_JWT = process.env.PINATA_JWT;
 
 export default async function uploadJSONToIPFS(formData: FormData) {
-  //pinata 설정
   console.log("===========🎉 Start pin ipfs===========");
 
   const name = formData.get("name") as string;
@@ -23,7 +22,6 @@ export default async function uploadJSONToIPFS(formData: FormData) {
   //pin image to pinata
   const buffer = Buffer.from(await imageFile.arrayBuffer());
 
-  // Readable 스트림 생성
   const readableStream = new Readable();
   readableStream.push(buffer);
   readableStream.push(null);
@@ -73,39 +71,3 @@ export default async function uploadJSONToIPFS(formData: FormData) {
     ipfsJson: body,
   };
 }
-
-// async function uploadJSONToIPFS(formData: FormData) {
-//   const name = formData.get("name") as string;
-//   const description = formData.get("description") as string;
-//   const imageFile = formData.get("file") as File;
-
-// First pin the image
-// const data = new FormData();
-// data.append("file", imageFile);
-// const pinFileRes = await fetch(
-//   "https://api.pinata.cloud/pinning/pinFileToIPFS",
-//   {
-//     method: "POST",
-//     headers: {
-//       Authorization: `Bearer ${process.env.PINATA_JWT}`,
-//     },
-//     body: data,
-//   }
-// );
-// const { IpfsHash: ImageIpfsHash } = await pinFileRes.json();
-
-// Next pin the JSON
-// const pinata = new pinataSDK({ pinataJWTKey: process.env.PINATA_JWT });
-
-// const res = await pinata.testAuthentication();
-// console.log(res);
-// "message": "Congratulations! You are communicating with the Pinata API"!"
-
-// const json = {
-//   name,
-//   description,
-//   image: `ipfs://${ImageIpfsHash}`,
-// };
-// const { IpfsHash: JsonIpfsHash } = await pinata.pinJSONToIPFS(json);
-// return { ipfsUri: `ipfs://${JsonIpfsHash}`, ipfsJson: json };
-// }

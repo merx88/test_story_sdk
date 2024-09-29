@@ -1,5 +1,5 @@
 "use client";
-import { iliad } from "@/app/providers";
+import { iliad } from "@/app/Web3Providers";
 import { PropsWithChildren, createContext } from "react";
 import { useContext, useState } from "react";
 import { Address, createPublicClient, createWalletClient, custom } from "viem";

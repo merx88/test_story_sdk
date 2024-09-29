@@ -5,8 +5,7 @@ import { Inter } from "next/font/google";
 import { type ReactNode } from "react";
 import { cookieToInitialState } from "wagmi";
 
-import { getConfig } from "../wagmi";
-import Providers from "./providers";
+import Providers from "./Web3Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 

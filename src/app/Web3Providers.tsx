@@ -32,7 +32,7 @@ const config = createConfig({
   transports: {
     [iliad.id]: http(),
   },
-}) as any;
+});
 const queryClient = new QueryClient();
 const evmNetworks = [
   {
