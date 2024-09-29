@@ -17,7 +17,7 @@ export default function RegisterIPA() {
   const [nftId, setNftId] = useState("");
   const [nftContractAddress, setNftContractAddress] = useState("");
   const { data: wallet } = useWalletClient();
-  // const { register } = useIpAsset();
+  const { register } = useIpAsset();
 
   const mintAndRegisterNFT = async () => {
     if (!wallet?.account.address) return;
